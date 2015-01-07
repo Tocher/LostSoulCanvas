@@ -25,6 +25,9 @@ function Keyboard(hero) {
           window.hero.direction = 2;
           //window.performAction = true;    
         break;
+        case 70: // F - Fire spell
+          window.hero.castSpell = true;
+        break;
       }
     //}
   }

@@ -1,11 +1,13 @@
 function Hero(x, y, src, width, height) {
+  this.hp = 100;
+  this.mp = 100;
   this.x = x;
   this.y = y;
   this.img = new Image();
   this.img.src = src;
   this.width = width;
   this.height = height;
-  this.scale = 3;
+  this.scale = 2;
   this.currentFrame = 0;
   this.currentFrameLine = 0;
   this.counter = 0;
@@ -16,12 +18,42 @@ function Hero(x, y, src, width, height) {
   this.direction = 2; // 1 - up, 2 - right, 3 - down, 4 - left
   this.move = false;
 
+  // spell
+  this.castSpell = false;
+  this.spell = new Image();
+  this.spell.src = 'img/spell.png';
+  this.spellCounter = 0;
+  this.spellFrame = 0;
+  this.timeForSpellFrame = 5;
+
   this.control = function(ctx, delta) {
     this.counter++;
     if(this.counter === this.timeForFrame) {
       this.counter = 0;
       this.changeFrame();
     }
+
+    if(this.castSpell) {
+      ctx.drawImage(this.spell
+        , this.width*this.spellFrame
+        , this.height*0
+        , this.width
+        , this.height
+        , this.x - this.width*this.scale
+        , this.y - this.height*this.scale
+        , this.width*6
+        , this.height*6
+      );
+      this.spellCounter++;
+      if(this.spellCounter === this.timeForSpellFrame) {
+        this.spellCounter = 0;
+        this.spellFireCircle();
+      }
+    }
+
+    ctx.font = "16px Times New Roman";
+    ctx.fillStyle = "white";
+    ctx.fillText("spell: "+ this.castSpell, 120, window.innerHeight - 50);
 
     this.movement(delta);
 
@@ -53,6 +85,14 @@ function Hero(x, y, src, width, height) {
         break;
       }
     }
+  }
+
+  this.spellFireCircle = function() {
+    this.spellFrame++;
+    if(this.spellFrame == 4) {
+      this.castSpell = false;
+      this.spellFrame = 0;
+    }    
   }
 
   this.draw = function(ctx) {
@@ -118,7 +158,7 @@ function Hero(x, y, src, width, height) {
       }
     }
     else {
-      this.timeForFrame = 10;
+      this.timeForFrame = 25;
       switch(this.direction) {
         case 1: // up
           this.currentFrameLine = 5;
