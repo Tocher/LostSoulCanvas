@@ -3,27 +3,26 @@ function Keyboard(hero) {
   window.hero = hero;
 
   document.onkeydown = function(e) {
-    //if(!window.performAction) {
       switch(e.keyCode) {
         case 87: // w
           window.hero.move = true;
           window.hero.direction = 1;    
-          //window.performAction = true;    
+          //window.hero.changeFrame();  
         break;
         case 83: // s
           window.hero.move = true;
           window.hero.direction = 3;
-          //window.performAction = true;    
+          //window.hero.changeFrame(); 
         break;
         case 65: // a
           window.hero.move = true;
           window.hero.direction = 4;
-          //window.performAction = true;    
+          //window.hero.changeFrame(); 
         break;
         case 68: // d
           window.hero.move = true;
           window.hero.direction = 2;
-          //window.performAction = true;    
+          //window.hero.changeFrame();   
         break;
         case 70: // F - Fire spell
           window.hero.castSpell = true;

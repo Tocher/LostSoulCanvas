@@ -4,7 +4,12 @@ function Hero(x, y, src, width, height) {
   this.x = x;
   this.y = y;
   this.img = new Image();
-  this.img.src = src;
+  this.img.src = src;  
+  this.img.width = width;
+  this.img.height = height;
+  //console.log(this.img);
+  //this.img = resize(this.img, 2);
+  //console.log(this.img);
   this.width = width;
   this.height = height;
   this.scale = 2;
@@ -41,8 +46,8 @@ function Hero(x, y, src, width, height) {
         , this.height
         , this.x - this.width*this.scale
         , this.y - this.height*this.scale
-        , this.width*6
-        , this.height*6
+        , this.width*this.scale*3
+        , this.height*this.scale*3
       );
       this.spellCounter++;
       if(this.spellCounter === this.timeForSpellFrame) {
@@ -55,36 +60,36 @@ function Hero(x, y, src, width, height) {
     ctx.fillStyle = "white";
     ctx.fillText("spell: "+ this.castSpell, 120, window.innerHeight - 50);
 
-    this.movement(delta);
+    if(this.move) {
+      this.movement(delta);
+    }
 
     this.draw(ctx);
   }
 
   this.movement = function(delta) {
-    if(this.move) {
-      switch(this.direction) {
-        case 1:
-          this.y -= this.speed * delta;
-          if(this.y < 0)
-            this.y = 0;
-        break;
-        case 2:
-          this.x += this.speed * delta;
-          if(this.x > window.innerWidth - this.width*this.scale)
-            this.x = window.innerWidth - this.width*this.scale;
-        break;
-        case 3:
-          this.y += this.speed * delta;
-          if(this.y > window.innerHeight - this.height*this.scale)
-            this.y = window.innerHeight - this.height*this.scale;
-        break;
-        case 4:
-          this.x -= this.speed * delta;
-          if(this.x < 0)
-            this.x = 0;
-        break;
-      }
-    }
+    switch(this.direction) {
+      case 1:
+        this.y -= this.speed * delta;
+        if(this.y < 0)
+          this.y = 0;
+      break;
+      case 2:
+        this.x += this.speed * delta;
+        if(this.x > window.innerWidth - this.width*this.scale)
+          this.x = window.innerWidth - this.width*this.scale;
+      break;
+      case 3:
+        this.y += this.speed * delta;
+        if(this.y > window.innerHeight - this.height*this.scale)
+          this.y = window.innerHeight - this.height*this.scale;
+      break;
+      case 4:
+        this.x -= this.speed * delta;
+        if(this.x < 0)
+          this.x = 0;
+      break;
+    }    
   }
 
   this.spellFireCircle = function() {
@@ -189,4 +194,44 @@ function Hero(x, y, src, width, height) {
     }
   }
   
+}
+
+
+
+
+var resize = function( img, scale ) {
+    // Takes an image and a scaling factor and returns the scaled image
+    
+    // The original image is drawn into an offscreen canvas of the same size
+    // and copied, pixel by pixel into another offscreen canvas with the 
+    // new size.
+    
+    var widthScaled = img.width * scale;
+    var heightScaled = img.height * scale;
+    
+    var orig = document.createElement('canvas');
+    orig.width = img.width;
+    orig.height = img.height;
+    var origCtx = orig.getContext('2d');
+    origCtx.drawImage(img, 0, 0);
+    var origPixels = origCtx.getImageData(0, 0, img.width, img.height);
+    
+    var scaled = document.createElement('canvas');
+    scaled.width = widthScaled;
+    scaled.height = heightScaled;
+    var scaledCtx = scaled.getContext('2d');
+    var scaledPixels = scaledCtx.getImageData( 0, 0, widthScaled, heightScaled );
+    
+    for( var y = 0; y < heightScaled; y++ ) {
+        for( var x = 0; x < widthScaled; x++ ) {
+            var index = (Math.floor(y / scale) * img.width + Math.floor(x / scale)) * 4;
+            var indexScaled = (y * widthScaled + x) * 4;
+            scaledPixels.data[ indexScaled ] = origPixels.data[ index ];
+            scaledPixels.data[ indexScaled+1 ] = origPixels.data[ index+1 ];
+            scaledPixels.data[ indexScaled+2 ] = origPixels.data[ index+2 ];
+            scaledPixels.data[ indexScaled+3 ] = origPixels.data[ index+3 ];
+        }
+    }
+    scaledCtx.putImageData( scaledPixels, 0, 0 );
+    return scaled;
 }

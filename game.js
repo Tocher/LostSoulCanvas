@@ -4,9 +4,12 @@ function main() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  //ctx.scale(2,2);
+  ctx.imageSmoothingEnabled = false;
+
   var hero = new Hero(0, 0, 'img/hero.png', 32, 32);
   var texture = new Texture('img/grass.png', 240, 120, 40, 40);
-  var world = new World(25, 25, texture);
+  var world = new World(45, 45, texture);
   world.generate();
   var keyboardListener = new Keyboard(hero);
 

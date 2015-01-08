@@ -5,7 +5,7 @@ function Texture(src, width, height, frameWidth, frameHeight) {
   this.height = height;
   this.frameWidth = frameWidth;
   this.frameHeight = frameHeight;
-  this.scale = 2;
+  this.scale = 1.4;
 
   this.frameCount = (this.width / this.frameWidth) * (this.height / this.frameHeight);
   this.frameX = this.width / this.frameWidth;
