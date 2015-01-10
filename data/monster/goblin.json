@@ -1,0 +1,36 @@
+{
+  "name" : "Goblin",
+  "hp" : 50,
+  "maxHp" : 50,
+  "width" : "26",
+  "height" : "26",
+  "img" : "img/goblin.png",
+  "movement" : {
+    "right" : {
+      "line" : 1,
+      "length" : 3
+    } ,
+    "up" : {
+      "line" : 4,
+      "length" : 4
+    } ,
+    "down" : {
+      "line" : 7,
+      "length" : 4
+    }
+  },
+  "stay" : {
+    "right" : {
+      "line" : 2,
+      "length" : 2
+    } ,
+    "up" : {
+      "line" : 5,
+      "length" : 2
+    } ,
+    "down" : {
+      "line" : 8,
+      "length" : 2
+    }
+  }
+}

@@ -6,8 +6,10 @@ require(
   , "texture"
   , "text"
   , "text!../data/monster/skeleton.json"
+  , "text!../data/monster/deathknight.json"
+  , "text!../data/monster/goblin.json"
   ]
-  , function (hero, monster, keyboard, world, texture, text, skeleton) {    
+  , function (hero, monster, keyboard, world, texture, text, skeleton, deathknight, goblin) {    
 
     var canvas = document.getElementById('game');
     var ctx = canvas.getContext('2d');  
@@ -21,14 +23,16 @@ require(
     // Monsters
     window.monsters = [];
     window.monsters.push(new Monster(0, 0, JSON.parse(skeleton)));
-    window.monsters.push(new Monster(250, 250, JSON.parse(skeleton)));
+    window.monsters.push(new Monster(250, 250, JSON.parse(goblin)));
     window.monsters.push(new Monster(430, 250, JSON.parse(skeleton)));
-    window.monsters.push(new Monster(350, 640, JSON.parse(skeleton)));
+    window.monsters.push(new Monster(350, 640, JSON.parse(deathknight)));
     window.monsters.push(new Monster(650, 640, JSON.parse(skeleton)));
-    window.monsters.push(new Monster(720, 120, JSON.parse(skeleton)));
+    window.monsters.push(new Monster(720, 120, JSON.parse(goblin)));
 
     setInterval(function() {
       window.monsters.push(new Monster(Math.floor(Math.random() * (window.innerWidth)) + 1, Math.floor(Math.random() * (window.innerHeight)) + 1, JSON.parse(skeleton)));
+      window.monsters.push(new Monster(Math.floor(Math.random() * (window.innerWidth)) + 1, Math.floor(Math.random() * (window.innerHeight)) + 1, JSON.parse(goblin)));
+      window.monsters.push(new Monster(Math.floor(Math.random() * (window.innerWidth)) + 1, Math.floor(Math.random() * (window.innerHeight)) + 1, JSON.parse(deathknight)));
     }, 5000)
 
     var texture = new Texture('img/grass.png', 240, 120, 40, 40);

@@ -108,16 +108,16 @@ function Hero(x, y, src, width, height) {
           spell_y = this.y + (this.height * this.scale / 2) - this.spellHeight2 / 2;
       switch(this.direction) {
         case 1:
-          spell_y -= this.spellHeight2;
+          spell_y -= this.spellWidth2;
         break;
         case 2:
-          spell_x += this.spellWidth2;
+          spell_x += this.spellHeight2;
         break;
         case 3:
-          spell_y += this.spellHeight2;
+          spell_y += this.spellWidth2;
         break;
         case 4:
-          spell_x -= this.spellWidth2;
+          spell_x -= this.spellHeight2;
         break;
       }
       ctx.drawImage(this.spell2

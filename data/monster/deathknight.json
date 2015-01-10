@@ -1,0 +1,36 @@
+{
+  "name" : "DeathKnight",
+  "hp" : 200,
+  "maxHp" : 200,
+  "width" : "42",
+  "height" : "42",
+  "img" : "img/deathknight.png",
+  "movement" : {
+    "right" : {
+      "line" : 1,
+      "length" : 4
+    } ,
+    "up" : {
+      "line" : 4,
+      "length" : 4
+    } ,
+    "down" : {
+      "line" : 7,
+      "length" : 4
+    }
+  },
+  "stay" : {
+    "right" : {
+      "line" : 2,
+      "length" : 2
+    } ,
+    "up" : {
+      "line" : 5,
+      "length" : 2
+    } ,
+    "down" : {
+      "line" : 8,
+      "length" : 2
+    }
+  }
+}

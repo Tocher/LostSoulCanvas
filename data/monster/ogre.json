@@ -1,0 +1,36 @@
+{
+  "name" : "Skeleton",
+  "hp" : 100,
+  "maxHp" : 100,
+  "width" : "48",
+  "height" : "48",
+  "img" : "img/skeleton.png",
+  "movement" : {
+    "right" : {
+      "line" : 1,
+      "length" : 4
+    } ,
+    "up" : {
+      "line" : 4,
+      "length" : 4
+    } ,
+    "down" : {
+      "line" : 7,
+      "length" : 4
+    }
+  },
+  "stay" : {
+    "right" : {
+      "line" : 2,
+      "length" : 2
+    } ,
+    "up" : {
+      "line" : 5,
+      "length" : 3
+    } ,
+    "down" : {
+      "line" : 8,
+      "length" : 3
+    }
+  }
+}
