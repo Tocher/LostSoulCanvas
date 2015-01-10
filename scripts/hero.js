@@ -21,34 +21,19 @@ function Hero(x, y, src, width, height) {
   // spell
   this.castSpell = false;
   this.spell = new Image();
-  this.spell.src = 'img/spell.png';
+  this.spell.src = 'img/nova.png';
   this.spellCounter = 0;
   this.spellFrame = 0;
-  this.timeForSpellFrame = 5;
+  this.timeForSpellFrame = 7;
+
+  this.spellWidth = 154;
+  this.spellHeight = 138;
 
   this.control = function(ctx, delta) {
     this.counter++;
     if(this.counter === this.timeForFrame) {
       this.counter = 0;
       this.changeFrame();
-    }
-
-    if(this.castSpell) {
-      ctx.drawImage(this.spell
-        , this.width*this.spellFrame
-        , this.height*0
-        , this.width
-        , this.height
-        , this.x - this.width*this.scale
-        , this.y - this.height*this.scale
-        , this.width*this.scale*3
-        , this.height*this.scale*3
-      );
-      this.spellCounter++;
-      if(this.spellCounter === this.timeForSpellFrame) {
-        this.spellCounter = 0;
-        this.spellFireCircle();
-      }
     }
 
     ctx.font = "16px Times New Roman";
@@ -60,6 +45,24 @@ function Hero(x, y, src, width, height) {
     }
 
     this.draw(ctx);
+    
+    if(this.castSpell) {
+      ctx.drawImage(this.spell
+        , this.spellWidth*this.spellFrame
+        , this.spellHeight*0
+        , this.spellWidth
+        , this.spellHeight
+        , this.x + (this.width * this.scale / 2) - this.spellWidth / 2
+        , this.y + (this.height * this.scale / 2) - this.spellHeight / 2
+        , this.spellWidth
+        , this.spellHeight
+      );
+      this.spellCounter++;
+      if(this.spellCounter === this.timeForSpellFrame) {
+        this.spellCounter = 0;
+        this.spellFireCircle();
+      }
+    }
   }
 
   this.movement = function(delta) {
@@ -89,7 +92,7 @@ function Hero(x, y, src, width, height) {
 
   this.spellFireCircle = function() {
     this.spellFrame++;
-    if(this.spellFrame == 4) {
+    if(this.spellFrame == 6) {
       this.castSpell = false;
       this.spellFrame = 0;
     }    

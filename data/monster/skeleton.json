@@ -1,7 +1,7 @@
 {
   "name" : "Skeleton",
-  "frameWidth" : "48",
-  "frameHeight" : "48",
+  "width" : "48",
+  "height" : "48",
   "img" : "img/skeleton.png",
   "movement" : {
     "right" : {

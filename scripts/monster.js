@@ -3,10 +3,11 @@ function Monster(x, y, json) {
   this.mp = 100;
   this.x = x;
   this.y = y;
+
+  this.mob = json;
+
   this.img = new Image();
-  this.img.src = src;  
-  this.width = width;
-  this.height = height;
+  this.img.src = this.mob.img;  
   this.scale = 2;
   this.currentFrame = 0;
   this.currentFrameLine = 0;
@@ -15,7 +16,7 @@ function Monster(x, y, json) {
   this.timeForFrame = 5;
 
   this.mirror = false;
-  this.direction = 2; // 1 - up, 2 - right, 3 - down, 4 - left
+  this.direction = Math.floor(Math.random() * (4)) + 1; // 1 - up, 2 - right, 3 - down, 4 - left
   this.move = false;
 
   this.control = function(ctx, delta) {
@@ -25,28 +26,6 @@ function Monster(x, y, json) {
       this.changeFrame();
     }
 
-    if(this.castSpell) {
-      ctx.drawImage(this.spell
-        , this.width*this.spellFrame
-        , this.height*0
-        , this.width
-        , this.height
-        , this.x - this.width*this.scale
-        , this.y - this.height*this.scale
-        , this.width*this.scale*3
-        , this.height*this.scale*3
-      );
-      this.spellCounter++;
-      if(this.spellCounter === this.timeForSpellFrame) {
-        this.spellCounter = 0;
-        this.spellFireCircle();
-      }
-    }
-
-    ctx.font = "16px Times New Roman";
-    ctx.fillStyle = "white";
-    ctx.fillText("spell: "+ this.castSpell, 120, window.innerHeight - 50);
-
     if(this.move) {
       this.movement(delta);
     }
@@ -55,24 +34,28 @@ function Monster(x, y, json) {
   }
 
   this.movement = function(delta) {
+    var w = this.mob.width,
+        h = this.mob.height,
+        s = this.scale,
+        sp = this.speed;
     switch(this.direction) {
       case 1:
-        this.y -= this.speed * delta;
+        this.y -= sp * delta;
         if(this.y < 0)
           this.y = 0;
       break;
       case 2:
-        this.x += this.speed * delta;
-        if(this.x > window.innerWidth - this.width*this.scale)
-          this.x = window.innerWidth - this.width*this.scale;
+        this.x += sp * delta;
+        if(this.x > window.innerWidth - w * s)
+          this.x = window.innerWidth - w * s;
       break;
       case 3:
-        this.y += this.speed * delta;
-        if(this.y > window.innerHeight - this.height*this.scale)
-          this.y = window.innerHeight - this.height*this.scale;
+        this.y += sp * delta;
+        if(this.y > window.innerHeight - h * s)
+          this.y = window.innerHeight - h * s;
       break;
       case 4:
-        this.x -= this.speed * delta;
+        this.x -= sp * delta;
         if(this.x < 0)
           this.x = 0;
       break;
@@ -80,32 +63,46 @@ function Monster(x, y, json) {
   }
 
   this.draw = function(ctx) {
+    var w = this.mob.width,
+        h = this.mob.height,
+        s = this.scale;
     if(this.mirror) {
       ctx.save();
       ctx.scale(-1, 1);
       ctx.drawImage(this.img
-        , this.width*this.currentFrame
-        , this.height*this.currentFrameLine
-        , this.width
-        , this.height
+        , w * this.currentFrame
+        , h * this.currentFrameLine
+        , w
+        , h
         , -this.x
         , this.y
-        , this.width*this.scale*-1
-        , this.height*this.scale
+        , w * this.scale * -1
+        , h * this.scale
       );
       ctx.restore();
     }
-    else
+    else {
       ctx.drawImage(this.img
-        , this.width*this.currentFrame
-        , this.height*this.currentFrameLine
-        , this.width
-        , this.height
+        , w * this.currentFrame
+        , h * this.currentFrameLine
+        , w
+        , h
         , this.x
         , this.y
-        , this.width*this.scale
-        , this.height*this.scale
-      );    
+        , w * this.scale
+        , h * this.scale
+      );
+    }
+    this.drawHP(ctx);
+  }
+
+  this.drawHP = function(ctx) {
+    var w = parseInt(this.mob.width);
+    var c = this.x + w;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(c - 20, this.y, 40, 8);
+    ctx.fillStyle = '#F00';
+    ctx.fillRect(c - 19, this.y + 1, 39 * this.hp / 100 , 7);
   }
 
   this.changeFrame = function() {
@@ -144,28 +141,28 @@ function Monster(x, y, json) {
       this.timeForFrame = 25;
       switch(this.direction) {
         case 1: // up
-          this.currentFrameLine = 5;
+          this.currentFrameLine = this.mob.stay.up.line;
           this.currentFrame++;
-          if(this.currentFrame > 1)
+          if(this.currentFrame == this.mob.stay.up.length)
             this.currentFrame = 0;
         break;
         case 2: // right
-          this.currentFrameLine = 2;
+          this.currentFrameLine = this.mob.stay.right.line;
           this.currentFrame++;
-          if(this.currentFrame > 4)
+          if(this.currentFrame == this.mob.stay.right.length)
             this.currentFrame = 0;
         break;
         case 3: // down
-          this.currentFrameLine = 8;
+          this.currentFrameLine = this.mob.stay.down.line;
           this.currentFrame++;
-          if(this.currentFrame > 1)
+          if(this.currentFrame == this.mob.stay.down.length)
             this.currentFrame = 0;
         break;
         case 4: // left
           this.mirror = true;
-          this.currentFrameLine = 2;
+          this.currentFrameLine = this.mob.stay.right.line;
           this.currentFrame++;
-          if(this.currentFrame > 4)
+          if(this.currentFrame == this.mob.stay.right.length)
             this.currentFrame = 0;
         break;
       }

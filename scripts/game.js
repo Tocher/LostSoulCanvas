@@ -1,4 +1,13 @@
-require(["hero","monster","keyboard","world","texture","text","text!../data/monster/skeleton.json"], function(hero, monster, keyboard, world, texture, text, skeleton) {    
+require(
+  [ "hero"
+  , "monster"
+  , "keyboard"
+  , "world"
+  , "texture"
+  , "text"
+  , "text!../data/monster/skeleton.json"
+  ]
+  , function (hero, monster, keyboard, world, texture, text, skeleton) {    
 
     var canvas = document.getElementById('game');
     var ctx = canvas.getContext('2d');  
@@ -8,7 +17,10 @@ require(["hero","monster","keyboard","world","texture","text","text!../data/mons
     ctx.imageSmoothingEnabled = false;
 
     var hero = new Hero(100, 100, 'img/hero.png', 32, 32);
-    var monster = new Hero(0, 0, JSON.parse(skeleton));
+    var monsters = [];
+    monsters.push(new Monster(0, 0, JSON.parse(skeleton)));
+    monsters.push(new Monster(250, 250, JSON.parse(skeleton)));
+
     var texture = new Texture('img/grass.png', 240, 120, 40, 40);
     var world = new World(45, 45, texture);
     world.generate();
@@ -26,7 +38,8 @@ require(["hero","monster","keyboard","world","texture","text","text!../data/mons
       world.render(ctx);
       hero.control(ctx, delta);
 
-      monster.control(ctx, delta);
+      for(var i = 0; i < monsters.length; i++)
+        monsters[i].control(ctx, delta);
 
       lastTime = now;
 
