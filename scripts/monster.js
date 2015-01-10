@@ -19,7 +19,10 @@ function Monster(x, y, json) {
   this.direction = Math.floor(Math.random() * (4)) + 1; // 1 - up, 2 - right, 3 - down, 4 - left
   this.move = false;
 
-  this.control = function(ctx, delta) {
+  this.randomMoveTimer = Math.floor(Math.random() * (30)) + 5;
+  this.MoveTimer = Math.floor(Math.random() * (60)) + 25;
+
+  this.render = function(ctx, delta) {
     this.counter++;
     if(this.counter === this.timeForFrame) {
       this.counter = 0;
@@ -27,7 +30,21 @@ function Monster(x, y, json) {
     }
 
     if(this.move) {
+      this.MoveTimer--;
+      if(this.MoveTimer == 0) {
+        this.move = false;
+        this.MoveTimer = Math.floor(Math.random() * (60)) + 25;
+      }
       this.movement(delta);
+    }
+    else {
+      this.randomMoveTimer--;
+      if(this.randomMoveTimer == 0)
+      {
+        this.move = true;
+        this.direction = Math.floor(Math.random() * (4)) + 1;
+        this.randomMoveTimer = Math.floor(Math.random() * (30)) + 5;
+      }
     }
 
     this.draw(ctx);
@@ -111,28 +128,28 @@ function Monster(x, y, json) {
       this.timeForFrame = 5;
       switch(this.direction) {
         case 1: // up
-          this.currentFrameLine = 4;
+          this.currentFrameLine = this.mob.movement.up.line;
           this.currentFrame++;
-          if(this.currentFrame > 7)
+          if(this.currentFrame >= this.mob.movement.up.length)
             this.currentFrame = 0;
         break;
         case 2: // right
-          this.currentFrameLine = 1;
+          this.currentFrameLine = this.mob.movement.right.line;
           this.currentFrame++;
-          if(this.currentFrame > 3)
+          if(this.currentFrame >= this.mob.movement.right.length)
             this.currentFrame = 0;
         break;
         case 3: // down
-          this.currentFrameLine = 7;
+          this.currentFrameLine = this.mob.movement.down.line;
           this.currentFrame++;
-          if(this.currentFrame > 3)
+          if(this.currentFrame >= this.mob.movement.down.length)
             this.currentFrame = 0;
         break;
         case 4: // left
           this.mirror = true;
-          this.currentFrameLine = 1;
+          this.currentFrameLine = this.mob.movement.right.line;
           this.currentFrame++;
-          if(this.currentFrame > 3)
+          if(this.currentFrame >= this.mob.movement.right.length)
             this.currentFrame = 0;
         break;
       }
@@ -141,27 +158,39 @@ function Monster(x, y, json) {
       this.timeForFrame = 25;
       switch(this.direction) {
         case 1: // up
-          this.currentFrameLine = this.mob.stay.up.line;
           this.currentFrame++;
+          if(this.currentFrameLine != this.mob.stay.up.line) {
+            this.currentFrameLine = this.mob.stay.up.line;
+            this.currentFrame = 0;
+          }
           if(this.currentFrame == this.mob.stay.up.length)
             this.currentFrame = 0;
         break;
         case 2: // right
-          this.currentFrameLine = this.mob.stay.right.line;
           this.currentFrame++;
+          if(this.currentFrameLine != this.mob.stay.right.line) {
+            this.currentFrameLine = this.mob.stay.right.line;
+            this.currentFrame = 0;
+          }
           if(this.currentFrame == this.mob.stay.right.length)
             this.currentFrame = 0;
         break;
         case 3: // down
-          this.currentFrameLine = this.mob.stay.down.line;
           this.currentFrame++;
+          if(this.currentFrameLine != this.mob.stay.down.line) {
+            this.currentFrameLine = this.mob.stay.down.line;
+            this.currentFrame = 0;
+          }
           if(this.currentFrame == this.mob.stay.down.length)
             this.currentFrame = 0;
         break;
         case 4: // left
           this.mirror = true;
-          this.currentFrameLine = this.mob.stay.right.line;
           this.currentFrame++;
+          if(this.currentFrameLine != this.mob.stay.right.line) {
+            this.currentFrameLine = this.mob.stay.right.line;
+            this.currentFrame = 0;
+          }
           if(this.currentFrame == this.mob.stay.right.length)
             this.currentFrame = 0;
         break;
