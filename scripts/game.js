@@ -19,13 +19,17 @@ require(
     var hero = new Hero(100, 100, 'img/hero.png', 32, 32);
 
     // Monsters
-    var monsters = [];
-    monsters.push(new Monster(0, 0, JSON.parse(skeleton)));
-    monsters.push(new Monster(250, 250, JSON.parse(skeleton)));
-    monsters.push(new Monster(430, 250, JSON.parse(skeleton)));
-    monsters.push(new Monster(350, 640, JSON.parse(skeleton)));
-    monsters.push(new Monster(650, 640, JSON.parse(skeleton)));
-    monsters.push(new Monster(720, 120, JSON.parse(skeleton)));
+    window.monsters = [];
+    window.monsters.push(new Monster(0, 0, JSON.parse(skeleton)));
+    window.monsters.push(new Monster(250, 250, JSON.parse(skeleton)));
+    window.monsters.push(new Monster(430, 250, JSON.parse(skeleton)));
+    window.monsters.push(new Monster(350, 640, JSON.parse(skeleton)));
+    window.monsters.push(new Monster(650, 640, JSON.parse(skeleton)));
+    window.monsters.push(new Monster(720, 120, JSON.parse(skeleton)));
+
+    setInterval(function() {
+      window.monsters.push(new Monster(Math.floor(Math.random() * (window.innerWidth)) + 1, Math.floor(Math.random() * (window.innerHeight)) + 1, JSON.parse(skeleton)));
+    }, 5000)
 
     var texture = new Texture('img/grass.png', 240, 120, 40, 40);
     var world = new World(45, 45, texture);
@@ -42,8 +46,8 @@ require(
 
 
       world.render(ctx);
-      for(var i = 0; i < monsters.length; i++)
-        monsters[i].render(ctx, delta);
+      for(var i = 0; i < window.monsters.length; i++)
+        window.monsters[i].render(ctx, delta);
       hero.control(ctx, delta);
 
 

@@ -24,10 +24,11 @@ function Hero(x, y, src, width, height) {
   this.spell.src = 'img/nova.png';
   this.spellCounter = 0;
   this.spellFrame = 0;
-  this.timeForSpellFrame = 7;
+  this.timeForSpellFrame = 4;
 
   this.spellWidth = 154;
   this.spellHeight = 138;
+  this.spellDamage = 1;
 
   this.control = function(ctx, delta) {
     this.counter++;
@@ -45,15 +46,17 @@ function Hero(x, y, src, width, height) {
     }
 
     this.draw(ctx);
-    
+
     if(this.castSpell) {
+      var spell_x = this.x + (this.width * this.scale / 2) - this.spellWidth / 2,
+          spell_y = this.y + (this.height * this.scale / 2) - this.spellHeight / 2;
       ctx.drawImage(this.spell
         , this.spellWidth*this.spellFrame
         , this.spellHeight*0
         , this.spellWidth
         , this.spellHeight
-        , this.x + (this.width * this.scale / 2) - this.spellWidth / 2
-        , this.y + (this.height * this.scale / 2) - this.spellHeight / 2
+        , spell_x
+        , spell_y
         , this.spellWidth
         , this.spellHeight
       );
@@ -61,6 +64,35 @@ function Hero(x, y, src, width, height) {
       if(this.spellCounter === this.timeForSpellFrame) {
         this.spellCounter = 0;
         this.spellFireCircle();
+      }
+      for(var i = 0; i < window.monsters.length; i++)
+      {
+        var mob_x = window.monsters[i].x,
+            mob_y = window.monsters[i].y,
+            mob_x2 = window.monsters[i].x + window.monsters[i].mob.width * window.monsters[i].scale,
+            mob_y2 = window.monsters[i].y + window.monsters[i].mob.height * window.monsters[i].scale;
+
+        if( (spell_x < mob_x
+          && spell_x + this.spellWidth > mob_x
+          && spell_y < mob_y
+          && spell_y + this.spellHeight > mob_y)
+          || (spell_x < mob_x2
+          && spell_x + this.spellWidth > mob_x2
+          && spell_y < mob_y2
+          && spell_y + this.spellHeight > mob_y2)
+          ) {
+          window.monsters[i].hp -= this.spellDamage;
+          if(window.monsters[i].hp <= 0)
+          {
+            var nMonsters = [];
+            for(var j = 0; j < window.monsters.length; j++)
+            {
+              if(i != j)
+                nMonsters.push(window.monsters[j]);
+            }
+            window.monsters = nMonsters;
+          }
+        }
       }
     }
   }
