@@ -30,16 +30,24 @@ function Hero(x, y, src, width, height) {
   this.spellHeight = 138;
   this.spellDamage = 1;
 
+  // Spell 2
+  this.castSpell2 = false;
+  this.spell2 = new Image();
+  this.spell2.src = 'img/coil.png';
+  this.spellCounter2 = 0;
+  this.spellFrame2 = 0;
+  this.timeForSpellFrame2 = 4;
+
+  this.spellWidth2 = 92;
+  this.spellHeight2 = 158;
+  this.spellDamage2 = 5;
+
   this.control = function(ctx, delta) {
     this.counter++;
     if(this.counter === this.timeForFrame) {
       this.counter = 0;
       this.changeFrame();
     }
-
-    ctx.font = "16px Times New Roman";
-    ctx.fillStyle = "white";
-    ctx.fillText("spell: "+ this.castSpell, 120, window.innerHeight - 50);
 
     if(this.move) {
       this.movement(delta);
@@ -81,8 +89,70 @@ function Hero(x, y, src, width, height) {
           && spell_y < mob_y2
           && spell_y + this.spellHeight > mob_y2)
           ) {
-          window.monsters[i].hp -= this.spellDamage;
-          if(window.monsters[i].hp <= 0)
+          window.monsters[i].mob.hp -= this.spellDamage;
+          if(window.monsters[i].mob.hp <= 0)
+          {
+            var nMonsters = [];
+            for(var j = 0; j < window.monsters.length; j++)
+            {
+              if(i != j)
+                nMonsters.push(window.monsters[j]);
+            }
+            window.monsters = nMonsters;
+          }
+        }
+      }
+    }
+    if(this.castSpell2) {
+      var spell_x = this.x + (this.width * this.scale / 2) - this.spellWidth2 / 2,
+          spell_y = this.y + (this.height * this.scale / 2) - this.spellHeight2 / 2;
+      switch(this.direction) {
+        case 1:
+          spell_y -= this.spellHeight2;
+        break;
+        case 2:
+          spell_x += this.spellWidth2;
+        break;
+        case 3:
+          spell_y += this.spellHeight2;
+        break;
+        case 4:
+          spell_x -= this.spellWidth2;
+        break;
+      }
+      ctx.drawImage(this.spell2
+        , this.spellWidth2*this.spellFrame2
+        , this.spellHeight2*0
+        , this.spellWidth2
+        , this.spellHeight2
+        , spell_x
+        , spell_y
+        , this.spellWidth2
+        , this.spellHeight2
+      );
+      this.spellCounter2++;
+      if(this.spellCounter2 === this.timeForSpellFrame2) {
+        this.spellCounter2 = 0;
+        this.spellFireCircle2();
+      }
+      for(var i = 0; i < window.monsters.length; i++)
+      {
+        var mob_x = window.monsters[i].x,
+            mob_y = window.monsters[i].y,
+            mob_x2 = window.monsters[i].x + window.monsters[i].mob.width * window.monsters[i].scale,
+            mob_y2 = window.monsters[i].y + window.monsters[i].mob.height * window.monsters[i].scale;
+
+        if( (spell_x < mob_x
+          && spell_x + this.spellWidth2 > mob_x
+          && spell_y < mob_y
+          && spell_y + this.spellHeight2 > mob_y)
+          || (spell_x < mob_x2
+          && spell_x + this.spellWidth2 > mob_x2
+          && spell_y < mob_y2
+          && spell_y + this.spellHeight2 > mob_y2)
+          ) {
+          window.monsters[i].mob.hp -= this.spellDamage2;
+          if(window.monsters[i].mob.hp <= 0)
           {
             var nMonsters = [];
             for(var j = 0; j < window.monsters.length; j++)
@@ -127,6 +197,14 @@ function Hero(x, y, src, width, height) {
     if(this.spellFrame == 6) {
       this.castSpell = false;
       this.spellFrame = 0;
+    }    
+  }
+
+  this.spellFireCircle2 = function() {
+    this.spellFrame2++;
+    if(this.spellFrame2 == 9) {
+      this.castSpell2 = false;
+      this.spellFrame2 = 0;
     }    
   }
 

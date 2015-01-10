@@ -1,5 +1,4 @@
 function Monster(x, y, json) {
-  this.hp = 100;
   this.mp = 100;
   this.x = x;
   this.y = y;
@@ -119,7 +118,7 @@ function Monster(x, y, json) {
     ctx.fillStyle = '#000';
     ctx.fillRect(c - 20, this.y, 40, 8);
     ctx.fillStyle = '#F00';
-    ctx.fillRect(c - 19, this.y + 1, 39 * this.hp / 100 , 7);
+    ctx.fillRect(c - 19, this.y + 1, 39 * this.mob.hp / this.mob.maxHp , 7);
   }
 
   this.changeFrame = function() {

@@ -27,6 +27,9 @@ function Keyboard(hero) {
         case 70: // F - Fire spell
           window.hero.castSpell = true;
         break;
+        case 67: // C - Coil spell
+          window.hero.castSpell2 = true;
+        break;
       }
     //}
   }
